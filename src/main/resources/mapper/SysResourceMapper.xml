@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bjhxqh.mybatis.mapper.SysResourceMapper">
+  <resultMap id="BaseResultMap" type="com.bjhxqh.mybatis.model.po.SysResource">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="menutype" jdbcType="VARCHAR" property="menutype" />
+    <result column="url" jdbcType="VARCHAR" property="url" />
+    <result column="method" jdbcType="VARCHAR" property="method" />
+    <result column="visible" jdbcType="VARCHAR" property="visible" />
+    <result column="menuorder" jdbcType="INTEGER" property="menuorder" />
+    <result column="menuclass" jdbcType="VARCHAR" property="menuclass" />
+    <result column="parent" jdbcType="INTEGER" property="parent" />
+  </resultMap>
+  <select id="findResourceByUserId" parameterType="String" resultType="com.bjhxqh.mybatis.model.po.SysResource">
+    SELECT sres.*
+    FROM sys_account sa
+    LEFT JOIN sys_user su ON sa.id = su.accountid
+    LEFT JOIN sys_role_user sru ON sru.userid = su.id
+    LEFT JOIN sys_role sr ON sr.id = sru.roleid
+    LEFT JOIN sys_role_authgroup sra ON sra.roleid = sr.id
+    LEFT JOIN sys_authgroup sau ON sau.id = sra.groupid
+    LEFT JOIN sys_authgroup_resource saur ON saur.groupid = sau.id
+    LEFT JOIN sys_resource sres ON sres.id = saur.resourceid
+    WHERE sa.account=#{account} and sres.url!='' and sres.url is not NULL and sres.method!='' and sres.method is not NULL
+    AND sres.parent!='' and sres.parent is not NULL
+    ORDER BY sres.menuorder
+  </select>
+  <select id="findParentResource" parameterType="String" resultType="com.bjhxqh.mybatis.model.po.SysResource">
+    /*SELECT * from sys_resource WHERE name!='' and name is not NULL and (parent='' or parent is NULL)
+    ORDER BY menuorder*/
+    SELECT distinct sres1.*
+    FROM sys_account sa
+    JOIN sys_user su ON sa.id = su.accountid
+    JOIN sys_role_user sru ON sru.userid = su.id
+    JOIN sys_role sr ON sr.id = sru.roleid
+    JOIN sys_role_authgroup sra ON sra.roleid = sr.id
+    JOIN sys_authgroup sau ON sau.id = sra.groupid
+    JOIN sys_authgroup_resource saur ON saur.groupid = sau.id
+    JOIN sys_resource sres ON sres.id= saur.resourceid
+    JOIN sys_resource sres2 ON sres.parent=sres2.id
+    JOIN sys_resource sres1 ON sres2.parent=sres1.id
+    WHERE sa.account=#{account}
+    ORDER BY sres1.menuorder
+  </select>
+  <select id="findSecondaryMenuByUserAndParentId" resultType="com.bjhxqh.mybatis.model.po.SysResource">
+    SELECT distinct sres2.*
+    FROM sys_account sa
+    JOIN sys_user su ON sa.id = su.accountid
+    JOIN sys_role_user sru ON sru.userid = su.id
+    JOIN sys_role sr ON sr.id = sru.roleid
+    JOIN sys_role_authgroup sra ON sra.roleid = sr.id
+    JOIN sys_authgroup sau ON sau.id = sra.groupid
+    JOIN sys_authgroup_resource saur ON saur.groupid = sau.id
+    JOIN sys_resource sres ON sres.id = saur.resourceid
+    JOIN sys_resource sres2 ON sres.parent=sres2.id
+    JOIN sys_resource sres1 ON sres2.parent=sres1.id
+    WHERE sa.account=#{account} and sres2.parent=#{parent} and sres.parent!='' and sres.parent is not NULL
+    ORDER BY sres.menuorder
+  </select>
+  <select id="findResourceByUserAndParentId" resultType="com.bjhxqh.mybatis.model.po.SysResource">
+    SELECT sres.*
+    FROM sys_account sa
+    JOIN sys_user su ON sa.id = su.accountid
+    JOIN sys_role_user sru ON sru.userid = su.id
+    JOIN sys_role sr ON sr.id = sru.roleid
+    JOIN sys_role_authgroup sra ON sra.roleid = sr.id
+    JOIN sys_authgroup sau ON sau.id = sra.groupid
+    JOIN sys_authgroup_resource saur ON saur.groupid = sau.id
+    JOIN sys_resource sres ON sres.id = saur.resourceid
+    JOIN sys_resource sres2 ON sres.parent=sres2.id
+    JOIN sys_resource sres1 ON sres2.parent=sres1.id
+    WHERE sa.account=#{account} and sres2.parent=#{parent} and sres.parent!='' and sres.parent is not NULL
+    ORDER BY sres.menuorder
+  </select>
+</mapper>

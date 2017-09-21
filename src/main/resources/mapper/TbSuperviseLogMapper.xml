@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.bjhxqh.mybatis.mapper.TbSuperviseLogMapper" >
+  <resultMap id="BaseResultMap" type="com.bjhxqh.mybatis.model.po.TbSuperviseLog" >
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="projectnum" property="projectnum" jdbcType="VARCHAR" />
+    <result column="projectname" property="projectname" jdbcType="VARCHAR" />
+    <result column="logdate" property="logdate" jdbcType="DATE" />
+    <result column="supervisor" property="supervisor" jdbcType="VARCHAR" />
+    <result column="weather" property="weather" jdbcType="VARCHAR" />
+    <result column="constructionnote" property="constructionnote" jdbcType="VARCHAR" />
+    <result column="jobcontent" property="jobcontent" jdbcType="VARCHAR" />
+  </resultMap>
+  <select id="selectByTbSuperviseLogQueryModel" resultMap="BaseResultMap">
+    select id,projectnum,projectname,logdate,supervisor,constructionnote,jobcontent from tb_supervise_log
+    <where>
+      <if test="projectnum != null and projectnum != ''">
+        projectnum like concat('%',concat(#{projectnum}, '%'))
+      </if>
+      <if test="projectname != null and projectname != ''">
+        and projectname like concat('%',concat(#{projectname}, '%'))
+      </if>
+      <if test="id != null">
+        and id = #{id}
+      </if>
+    </where>
+  </select>
+</mapper>

@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.bjhxqh.mybatis.mapper.SysUserMapper" >
+  <resultMap id="BaseResultMap" type="com.bjhxqh.mybatis.model.po.SysUser" >
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="number" property="number" jdbcType="VARCHAR" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="departmentid" property="departmentid" jdbcType="INTEGER" />
+    <result column="sex" property="sex" jdbcType="VARCHAR" />
+    <result column="birthday" property="birthday" jdbcType="TIMESTAMP" />
+    <result column="hometown" property="hometown" jdbcType="VARCHAR" />
+    <result column="email" property="email" jdbcType="VARCHAR" />
+    <result column="homephone" property="homephone" jdbcType="VARCHAR" />
+    <result column="officephone" property="officephone" jdbcType="VARCHAR" />
+    <result column="mobile" property="mobile" jdbcType="VARCHAR" />
+    <result column="address" property="address" jdbcType="VARCHAR" />
+    <result column="postcode" property="postcode" jdbcType="VARCHAR" />
+    <result column="qq" property="qq" jdbcType="VARCHAR" />
+    <result column="accountid" property="accountid" jdbcType="INTEGER" />
+  </resultMap>
+  <select id="findUserbyAccount" parameterType="String" resultType="com.bjhxqh.mybatis.model.po.SysUser">
+    SELECT su.*
+    FROM sys_account sa
+    JOIN sys_user su ON sa.id = su.accountid
+    WHERE sa.account=#{account}
+  </select>
+  <select id="selectBySysuserQueryModel" resultMap="BaseResultMap">
+    select id,number,name,sex,birthday,hometown,email,homephone,officephone,mobile,address,postcode,qq from sys_user
+    <where>
+      <if test="number != null and number != ''">
+        number like concat('%',concat(#{number}, '%'))
+      </if>
+      <if test="name != null and name != ''">
+        and name like concat('%',concat(#{name}, '%'))
+      </if>
+      <if test="id != null">
+        and id = #{id}
+      </if>
+    </where>
+  </select>
+</mapper>
