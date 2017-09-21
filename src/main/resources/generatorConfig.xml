@@ -14,7 +14,9 @@
         </plugin>
         <jdbcConnection driverClass="${druid.driver-class}" connectionURL="${druid.url}" userId="${druid.username}" password="${druid.password}">
         </jdbcConnection>
-        <javaModelGenerator targetPackage="com.bjhxqh.mybatis.model.po" targetProject="src/main/java"/>
+        <javaModelGenerator targetPackage="com.bjhxqh.mybatis.model.po" targetProject="src/main/java">
+            <property name="rootClass" value="com.bjhxqh.common.base.model.BaseEntity" />
+        </javaModelGenerator>
         <sqlMapGenerator targetPackage="mapper" targetProject="src/main/resources"/>
         <javaClientGenerator targetPackage="com.bjhxqh.mybatis.mapper" targetProject="src/main/java" type="XMLMAPPER"/>
         <table tableName="user" />
