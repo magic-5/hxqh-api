@@ -12,7 +12,7 @@
   </resultMap>
 
   <select id="findRoleByUserId" parameterType="String" resultType="com.bjhxqh.mybatis.model.po.SysRole">
-    SELECT sres.*
+    SELECT sr.*
     FROM sys_account sa
     LEFT JOIN sys_user su ON sa.id = su.accountid
     LEFT JOIN sys_role_user sru ON sru.userid = su.id
